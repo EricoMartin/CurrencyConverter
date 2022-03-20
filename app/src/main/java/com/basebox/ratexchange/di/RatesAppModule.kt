@@ -41,8 +41,10 @@ object RatesAppModule {
     @Singleton
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient, gsonConverterFactory: GsonConverterFactory):
-            Retrofit = Retrofit.Builder().baseUrl(URLConstants.BASE_URL).client(okHttpClient)
-        .addConverterFactory(gsonConverterFactory).build()
+            Retrofit {
+        return Retrofit.Builder().baseUrl(URLConstants.BASE_URL).client(okHttpClient)
+            .addConverterFactory(gsonConverterFactory).build()
+    }
 
     @Singleton
     @Provides
@@ -52,7 +54,7 @@ object RatesAppModule {
 
     @Singleton
     @Provides
-    fun provideMainRepository(api: RatesAPI): MainRepository = DefaultRepository(RemoteAPICall(api))
+    fun provideMainRepository(api: RemoteAPICall): MainRepository = DefaultRepository(api)
 
     @Singleton
     @Provides

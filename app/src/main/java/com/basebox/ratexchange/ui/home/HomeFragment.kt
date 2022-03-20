@@ -55,13 +55,15 @@ class HomeFragment : Fragment() {
                 when (it) {
                     is HomeViewModel.RateEvent.Success -> {
                         binding.progressBar.isVisible = false
-                        toText.editText?.setTextColor(Color.BLUE)
-                        toText.editText?.text ?: it.result
+                        toText.editText?.setText(homeViewModel.baseCurrencyTyped.value)
+                        binding.textInputLayout2.editText?.setTextColor(Color.BLUE)
+                        binding.textInputLayout2.editText?.setText("= ${it.result}")
                     }
                     is HomeViewModel.RateEvent.Failure -> {
                         binding.progressBar.isVisible = false
-                        toText.editText?.setTextColor(Color.RED)
-                        binding.textInputLayout2.editText?.text ?: it.error
+                        toText.editText?.setText(homeViewModel.baseCurrencyTyped.value)
+                        binding.textInputLayout2.editText?.setTextColor(Color.RED)
+                        binding.textInputLayout2.editText?.setText(it.error)
                     }
                     is HomeViewModel.RateEvent.Loading -> {
                         binding.progressBar.isVisible = true
