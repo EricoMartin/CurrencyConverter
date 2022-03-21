@@ -9,21 +9,25 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.basebox.ratexchange.R
 import com.basebox.ratexchange.databinding.FragmentHomeBinding
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
 
-
     private val homeViewModel: HomeViewModel by viewModels()
     private var _binding: FragmentHomeBinding? = null
-    private lateinit var charts: LineChart
+    private lateinit var lineList: ArrayList<Entry>
+    private lateinit var lineDataSet: LineDataSet
+    private lateinit var lineData: LineData
+    private lateinit var chart: LineChart
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -37,10 +41,10 @@ class HomeFragment : Fragment() {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        charts = LineChart(requireContext())
-        charts = binding.graph.chart
+        chart = root.findViewById(R.id.chart)
+        Utils.init(context)
         val toText = binding.textInputLayout
+
 
         binding.button.setOnClickListener {
             homeViewModel.convert(
@@ -72,39 +76,29 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-//        val textView: TextView = binding.textHome
-//        homeViewModel.text.observe(viewLifecycleOwner, Observer {
-//            textView.text = it
-//        })
+
+        lineList = ArrayList()
+        lineList.add(Entry(10f, 100f))
+        lineList.add(Entry(20f, 200f))
+        lineList.add(Entry(30f, 300f))
+        lineList.add(Entry(40f, 400f))
+        lineList.add(Entry(50f, 500f))
+        lineList.add(Entry(60f, 600f))
+        lineList.add(Entry(70f, 700f))
+
+        lineDataSet = LineDataSet(lineList, "Past 30 days")
+        lineData = LineData(lineDataSet)
+        binding.chart.data = lineData
+        lineDataSet.valueTextSize = 20f
+        lineDataSet.color = Color.WHITE
+        lineDataSet.valueTextColor = Color.BLUE
+        lineDataSet.setCircleColor(Color.WHITE)
+        lineDataSet.setDrawFilled(true)
+        lineDataSet.lineWidth = 1.75f
+        lineDataSet.circleRadius = 5f
+        lineDataSet.circleHoleRadius = 2.5f
+
         return root
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val data: LineData = getData(36, 100.toFloat())!!
-    }
-
-    private fun getData(count: Int, range: Float): LineData? {
-        val values: ArrayList<Entry> = ArrayList()
-        for (i in 0 until count) {
-            val val1 = (Math.random() * range).toFloat() + 3
-            values.add(Entry(i.toFloat(), val1))
-        }
-
-        // create a dataset and give it a type
-        val set1 = LineDataSet(values, "DataSet 1")
-        // set1.setFillAlpha(110);
-        // set1.setFillColor(Color.RED);
-        set1.lineWidth = 1.75f
-        set1.circleRadius = 5f
-        set1.circleHoleRadius = 2.5f
-        set1.color = Color.WHITE
-        set1.setCircleColor(Color.WHITE)
-        set1.highLightColor = Color.WHITE
-        set1.setDrawValues(false)
-
-        // create a data object with the data sets
-        return LineData(set1)
     }
 
     override fun onDestroyView() {
