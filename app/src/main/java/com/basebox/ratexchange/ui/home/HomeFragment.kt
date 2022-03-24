@@ -57,13 +57,12 @@ class HomeFragment : Fragment() {
 //        binding.spinner2.adapter = arrayAdapter
         val spinnerAdapter: SpinnerAdapter = SpinnerAdapter(
             requireContext(),
-            binding.spinner.id,
             resources.getStringArray(R.array.currencies)
         )
         spinnerAdapter.setDropDownViewResource(R.layout.drop_down_item)
 
-        binding.spinner.adapter = arrayAdapter
-        binding.spinner2.adapter = arrayAdapter
+        binding.spinner.adapter = spinnerAdapter
+        binding.spinner2.adapter = spinnerAdapter
 
 
         binding.button.setOnClickListener {
