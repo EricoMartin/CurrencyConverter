@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.basebox.ratexchange.R
 import com.basebox.ratexchange.databinding.FragmentHomeBinding
+import com.basebox.ratexchange.ui.adapters.SpinnerAdapter
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
@@ -44,6 +46,24 @@ class HomeFragment : Fragment() {
         chart = root.findViewById(R.id.chart)
         Utils.init(context)
         val toText = binding.textInputLayout
+        val arrayAdapter = ArrayAdapter<String>(
+            requireContext(),
+            R.layout.drop_down_item,
+            R.id.textView2,
+            resources.getStringArray(R.array.currencies)
+        )
+
+//        binding.spinner.adapter = arrayAdapter
+//        binding.spinner2.adapter = arrayAdapter
+        val spinnerAdapter: SpinnerAdapter = SpinnerAdapter(
+            requireContext(),
+            binding.spinner.id,
+            resources.getStringArray(R.array.currencies)
+        )
+        spinnerAdapter.setDropDownViewResource(R.layout.drop_down_item)
+
+        binding.spinner.adapter = arrayAdapter
+        binding.spinner2.adapter = arrayAdapter
 
 
         binding.button.setOnClickListener {
@@ -104,6 +124,7 @@ class HomeFragment : Fragment() {
 
         return root
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

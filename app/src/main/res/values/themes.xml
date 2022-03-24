@@ -30,6 +30,12 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="roundedImageViewRounded">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+        <item name="android:background">@color/white</item>
+    </style>
+
     <style name="MenuItemTextAppearance" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Menu">
         <item name="textAllCaps">false</item>
         <item name="android:textSize">16sp</item>

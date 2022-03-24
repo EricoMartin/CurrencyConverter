@@ -3,12 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/ERICO/Documents/RateXchange/app/src/main/res/drawable/circle_view.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/ERICO/Documents/RateXchange/app/src/main/res/drawable/graph_background.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/ERICO/Documents/RateXchange/app/src/main/res/drawable/ic_baseline_notes_24.xml" value="0.1" />
+        <entry key="..\:/Users/ERICO/Documents/RateXchange/app/src/main/res/drawable/image.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/ERICO/Documents/RateXchange/app/src/main/res/drawable/spinner_symbols.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/ERICO/Documents/RateXchange/app/src/main/res/font/sansita_swashed_bold.xml" value="0.21822916666666667" />
         <entry key="..\:/Users/ERICO/Documents/RateXchange/app/src/main/res/layout/activity_main.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/ERICO/Documents/RateXchange/app/src/main/res/layout/app_bar_main.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/ERICO/Documents/RateXchange/app/src/main/res/layout/circle_view.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/ERICO/Documents/RateXchange/app/src/main/res/layout/drop_down_item.xml" value="0.67" />
         <entry key="..\:/Users/ERICO/Documents/RateXchange/app/src/main/res/layout/fragment_home.xml" value="0.22" />
         <entry key="..\:/Users/ERICO/Documents/RateXchange/app/src/main/res/layout/graph_layout.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/ERICO/Documents/RateXchange/app/src/main/res/menu/main.xml" value="0.18802083333333333" />
