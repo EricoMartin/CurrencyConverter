@@ -78,25 +78,29 @@ class HomeFragment : Fragment() {
         }
 
         lineList = ArrayList()
-        lineList.add(Entry(10f, 100f))
-        lineList.add(Entry(20f, 200f))
-        lineList.add(Entry(30f, 300f))
-        lineList.add(Entry(40f, 400f))
-        lineList.add(Entry(50f, 500f))
-        lineList.add(Entry(60f, 600f))
-        lineList.add(Entry(70f, 700f))
+        lineList.add(Entry(10f, 460f))
+        lineList.add(Entry(20f, 540f))
+        lineList.add(Entry(30f, 600f))
+        lineList.add(Entry(40f, 550f))
+        lineList.add(Entry(50f, 1000f))
+        lineList.add(Entry(60f, 1100f))
+        lineList.add(Entry(70f, 950f))
+        lineList.add(Entry(80f, 810f))
+        lineList.add(Entry(90f, 640f))
+        lineList.add(Entry(100f, 400f))
 
         lineDataSet = LineDataSet(lineList, "Past 30 days")
         lineData = LineData(lineDataSet)
         binding.chart.data = lineData
-        lineDataSet.valueTextSize = 20f
+        lineDataSet.valueTextSize = 0f
         lineDataSet.color = Color.WHITE
-        lineDataSet.valueTextColor = Color.BLUE
+        lineDataSet.valueTextColor = Color.WHITE
         lineDataSet.setCircleColor(Color.WHITE)
         lineDataSet.setDrawFilled(true)
-        lineDataSet.lineWidth = 1.75f
-        lineDataSet.circleRadius = 5f
-        lineDataSet.circleHoleRadius = 2.5f
+        lineDataSet.lineWidth = 1.0f
+        lineDataSet.circleRadius = 0.5f
+        lineDataSet.circleHoleRadius = 0.5f
+        lineDataSet.highLightColor = resources.getColor(R.color.new_green)
 
         return root
     }
