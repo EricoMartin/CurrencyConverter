@@ -51,7 +51,7 @@
                     android:layout_height="wrap_content"
                     android:background="#FAF9F9"
                     android:elevation="16dp"
-                    android:hint="Enter Amount"
+                    android:hint="@string/enter_amount"
                     android:inputType="numberDecimal" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -73,7 +73,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#FAF9F9"
-                    android:hint="Rate"
+                    android:hint="@string/rate"
                     android:elevation="16dp"
                     android:inputType="numberDecimal" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -103,6 +103,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/spinner2"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/spinner"
+                android:contentDescription="@string/switch_toggle"
                 app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
 
             <Spinner

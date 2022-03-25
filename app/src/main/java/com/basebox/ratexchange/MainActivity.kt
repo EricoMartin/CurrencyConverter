@@ -2,8 +2,8 @@ package com.basebox.ratexchange
 
 import android.os.Bundle
 import android.view.Menu
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -26,22 +26,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        binding.appBarMain.toolbar.setNavigationIcon(
-//            ResourcesCompat.getDrawable(getResources(),
-//                R.drawable.ic_baseline_notes_24, null))
-
         setSupportActionBar(binding.appBarMain.toolbar)
-
-        val toggle = ActionBarDrawerToggle(
-            this,
-            binding.drawerLayout,
-            binding.appBarMain.toolbar,
-            R.string.navigation_drawer_open,
-            R.string.navigation_drawer_close
-        )
-        toggle.isDrawerIndicatorEnabled = false
-        toggle.setHomeAsUpIndicator(R.drawable.ic_baseline_notes_24)
-
+        binding.appBarMain.toolbar.post {
+            binding.appBarMain.toolbar.navigationIcon =
+                ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_notes_24, theme)
+        }
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView

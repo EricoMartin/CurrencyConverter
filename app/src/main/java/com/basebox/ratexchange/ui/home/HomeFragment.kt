@@ -53,8 +53,6 @@ class HomeFragment : Fragment() {
             resources.getStringArray(R.array.currencies)
         )
 
-//        binding.spinner.adapter = arrayAdapter
-//        binding.spinner2.adapter = arrayAdapter
         val spinnerAdapter: SpinnerAdapter = SpinnerAdapter(
             requireContext(),
             resources.getStringArray(R.array.currencies)

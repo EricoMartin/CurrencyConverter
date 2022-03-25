@@ -15,6 +15,10 @@
     <string name="convert_button">Convert Button</string>
     <string name="sign_up">Sign up</string>
     <string name="currency_calculator">Currency Calculator<font fgcolor="@color/new_green">.</font></string>
+    <string name="aud">AUD</string>
+    <string name="rate">Rate</string>
+    <string name="switch_toggle">switch toggle</string>
+    <string name="enter_amount">Enter Amount</string>
 
     <string-array name="currencies">
         <item>AUD</item>
