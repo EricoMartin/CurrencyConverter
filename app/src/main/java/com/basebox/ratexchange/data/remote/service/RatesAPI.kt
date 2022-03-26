@@ -9,4 +9,7 @@ import retrofit2.http.Query
 interface RatesAPI {
     @GET(URLConstants.USD_URL)
     suspend fun getRates(@Query("base") currency: String): Response<RateResponse>
+
+    @GET(URLConstants.TIME_URL)
+    suspend fun getTimeRates(): Response<RateResponse>
 }

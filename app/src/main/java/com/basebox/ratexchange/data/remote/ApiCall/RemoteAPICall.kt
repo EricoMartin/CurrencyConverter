@@ -6,4 +6,6 @@ import javax.inject.Inject
 class RemoteAPICall @Inject constructor(private val apiService: RatesAPI) {
     suspend fun getRate(base: String) =
         apiService.getRates(base)
+
+    suspend fun getTimelyRates() = apiService.getTimeRates()
 }

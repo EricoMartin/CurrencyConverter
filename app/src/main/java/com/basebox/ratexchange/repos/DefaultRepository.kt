@@ -24,14 +24,19 @@ class DefaultRepository @Inject constructor(
         }
     }
 
+    override suspend fun getTimelyRates(): Resource<RateResponse> {
+        return try {
+            val response = remoteAPICall.getTimelyRates()
+            val result = response.body()
+            if (response.isSuccessful && result != null) {
+                Resource.Success(result)
+            } else {
+                Resource.Error(response.message())
+            }
+        } catch (e: Exception) {
+            Resource.Error(e.message ?: "An Error Occurred")
 
-//        flow<Resource<RateResponse>> {
-//            emit(safeApiCall { remoteAPICall.getRate(base) })
-//        }.flowOn(Dispatchers.IO) as Resource<RateResponse>
-//    }
-
-//    override suspend fun getRate(baseCurrency: String): Resource<RateResponse> {
-//        return getRates(baseCurrency)
-//    }
+        }
+    }
 }
 

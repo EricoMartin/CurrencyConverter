@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -27,19 +28,28 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.appBarMain.toolbar)
-        binding.appBarMain.toolbar.post {
-            binding.appBarMain.toolbar.navigationIcon =
-                ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_notes_24, theme)
-        }
+
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
+
+        binding.appBarMain.toolbar.post {
+            binding.appBarMain.toolbar.navigationIcon =
+                ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_notes_24, theme)
+            binding.appBarMain.toolbar.setNavigationOnClickListener {
+                if (!binding.drawerLayout.isDrawerOpen(GravityCompat.START)) binding.drawerLayout.openDrawer(
+                    GravityCompat.START
+                )
+                else binding.drawerLayout.closeDrawer(GravityCompat.END)
+            }
+        }
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home
+                R.id.nav_home, R.id.signupFragment
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

@@ -1,11 +1,12 @@
 package com.basebox.ratexchange.ui.home
 
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -14,6 +15,7 @@ import com.basebox.ratexchange.R
 import com.basebox.ratexchange.databinding.FragmentHomeBinding
 import com.basebox.ratexchange.ui.adapters.SpinnerAdapter
 import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
@@ -35,6 +37,7 @@ class HomeFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,22 +49,37 @@ class HomeFragment : Fragment() {
         chart = root.findViewById(R.id.chart)
         Utils.init(context)
         val toText = binding.textInputLayout
-        val arrayAdapter = ArrayAdapter<String>(
+
+        val spinnerAdapter = SpinnerAdapter(
             requireContext(),
-            R.layout.drop_down_item,
-            R.id.textView2,
             resources.getStringArray(R.array.currencies)
         )
 
-        val spinnerAdapter: SpinnerAdapter = SpinnerAdapter(
-            requireContext(),
-            resources.getStringArray(R.array.currencies)
-        )
+        homeViewModel.getHistoricalRates()
         spinnerAdapter.setDropDownViewResource(R.layout.drop_down_item)
 
         binding.spinner.adapter = spinnerAdapter
         binding.spinner2.adapter = spinnerAdapter
 
+        binding.imageView2.setOnClickListener {
+            binding.textInputLayout.editText?.text?.clear()
+            binding.textInputLayout2.editText?.text?.clear()
+
+            val spinValue = binding.spinner2
+                .selectedItem.toString()
+            binding.spinner2.setSelection(
+                spinnerAdapter.getPosition(
+                    binding.spinner
+                        .selectedItem.toString()
+                )
+            )
+
+            binding.spinner.setSelection(
+                spinnerAdapter.getPosition(
+                    spinValue
+                )
+            )
+        }
 
         binding.button.setOnClickListener {
             homeViewModel.convert(
@@ -95,33 +113,49 @@ class HomeFragment : Fragment() {
         }
 
         lineList = ArrayList()
-        lineList.add(Entry(10f, 460f))
-        lineList.add(Entry(20f, 540f))
-        lineList.add(Entry(30f, 600f))
-        lineList.add(Entry(40f, 550f))
-        lineList.add(Entry(50f, 1000f))
-        lineList.add(Entry(60f, 1100f))
-        lineList.add(Entry(70f, 950f))
-        lineList.add(Entry(80f, 810f))
-        lineList.add(Entry(90f, 640f))
-        lineList.add(Entry(100f, 400f))
+        for (i in homeViewModel.timeRateData.value.toString().indices) {
+            lineList.add(
+                Entry(
+                    i.toFloat() + 10f,
+                    homeViewModel.timeRateData.value.toString()[i].code.toFloat()
+                )
+            )
+        }
 
         lineDataSet = LineDataSet(lineList, "Past 30 days")
         lineData = LineData(lineDataSet)
         binding.chart.data = lineData
-        lineDataSet.valueTextSize = 0f
+        chart.setViewPortOffsets(10f, 0f, 10f, 0f)
+        chart.setDrawGridBackground(false)
+        chart.axisLeft.isEnabled = true
+        chart.axisLeft.spaceTop = 40f
+        chart.axisLeft.spaceBottom = 40f
+        chart.axisRight.isEnabled = false
+        chart.axisLeft.axisLineColor = Color.WHITE
+        chart.xAxis.axisLineColor = Color.WHITE
+        chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+        chart.xAxis.isEnabled = true
+        chart.tooltipText = lineData.getDataSetForEntry(lineList[0]).toString()
+
+        // animate calls invalidate()...
+        chart.animateX(2500)
         lineDataSet.color = Color.WHITE
+        lineData.setValueTextSize(0f)
+        lineDataSet.setDrawIcons(false)
+        lineDataSet.setDrawFilled(true)
+        lineDataSet.disableDashedLine()
+        lineDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
+        lineDataSet.setGradientColor(Color.WHITE, Color.BLUE)
+        lineDataSet.setDrawValues(false)
         lineDataSet.valueTextColor = Color.WHITE
         lineDataSet.setCircleColor(Color.WHITE)
         lineDataSet.setDrawFilled(true)
-        lineDataSet.lineWidth = 1.0f
-        lineDataSet.circleRadius = 0.5f
-        lineDataSet.circleHoleRadius = 0.5f
-        lineDataSet.highLightColor = resources.getColor(R.color.new_green)
+        lineDataSet.lineWidth = 0.5f
+        lineDataSet.circleRadius = 0f
+        lineDataSet.circleHoleRadius = 0f
 
         return root
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -9,6 +9,7 @@ import com.basebox.ratexchange.data.remote.Rates
 import com.basebox.ratexchange.repos.MainRepository
 import com.basebox.ratexchange.util.DispatcherProvider
 import com.basebox.ratexchange.util.Resource
+import com.google.gson.JsonArray
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,16 +30,21 @@ class HomeViewModel @Inject constructor(
         object Empty : RateEvent()
     }
 
+    val array = JsonArray()
     private val _conversion = MutableStateFlow<RateEvent>(RateEvent.Empty)
     val conversion: StateFlow<RateEvent> = _conversion
     private val _baseCurrencyType: MutableLiveData<String> = MutableLiveData<String>()
+
     val baseCurrencyTyped: LiveData<String>
         get() = _baseCurrencyType
+
+    private val _timeRateData = MutableStateFlow<RateEvent>(RateEvent.Empty)
+    val timeRateData get() = _timeRateData
 
     fun convert(amount: String, baseCurrency: String, toCurrency: String) {
         val from = amount.toFloatOrNull()
         _baseCurrencyType.value =
-            "$from                                                            $baseCurrency"
+            "$from $baseCurrency"
         if (from == null) {
             _conversion.value = RateEvent.Failure("Invalid exchange amount")
             return
@@ -65,7 +71,28 @@ class HomeViewModel @Inject constructor(
                             "Result = ${convertedRate.toDouble()} $toCurrency"
                         )
                         _conversion.value =
-                            RateEvent.Success("$convertedRate                                                            $toCurrency")
+                            RateEvent.Success("$convertedRate $toCurrency")
+                    }
+                }
+            }
+        }
+    }
+
+    fun getHistoricalRates() {
+        viewModelScope.launch(dispatcher.io) {
+            when (val ratesResponse = repository.getTimelyRates()) {
+                is Resource.Error -> {
+                    _timeRateData.value =
+                        RateEvent.Failure(ratesResponse.message!!)
+                    Log.d("ViewModelErrResponse", "Rate = ${ratesResponse.message}")
+                }
+                is Resource.Success -> {
+                    val rates = ratesResponse.data!!.rates.uSD
+                    _timeRateData.value = RateEvent.Success(ratesResponse.data.rates.uSD.toString())
+                    Log.d("ViewModelResponse", "Rate = $rates")
+
+                    for (i in rates.toString()) {
+                        array.add(i)
                     }
                 }
             }
@@ -105,8 +132,8 @@ class HomeViewModel @Inject constructor(
             "SGD" -> rates.sGD
             "THB" -> rates.tHB
             "ZAR" -> rates.zAR
-            "EUR" -> rates.eUR.toDouble()
+            "EUR" -> rates.eUR
 
-            else -> rates.eUR.toDouble()
+            else -> rates.eUR
         }
 }

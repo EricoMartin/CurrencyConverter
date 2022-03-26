@@ -20,6 +20,7 @@
     <string name="switch_toggle">switch toggle</string>
     <string name="enter_amount">Enter Amount</string>
 
+
     <string-array name="currencies">
         <item>AUD</item>
         <item>BGN</item>
@@ -54,4 +55,7 @@
         <item>USD</item>
         <item>ZAR</item>
     </string-array>
+    <string name="signup">Signup</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
 </resources>
