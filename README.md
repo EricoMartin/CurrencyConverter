@@ -1,7 +1,7 @@
 # CurrencyConverter
 Exchange rate converter application
 
-Appetixe link: https://appetize.io/app/v8tbvgnak5931y54cn2enyb1tg
+Appetixe link: https://appetize.io/app/t7ay4j6nm4yuy4hkj98f2zrh3w
 
 
 
