@@ -1,10 +1,12 @@
-package com.basebox.ratexchange.data.remote
+package com.basebox.ratexchange.data.local.entity
 
-
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class Rates(
+@Entity
+data class RatesModel(
     @SerializedName("AUD")
     @Expose
     val aUD: Double,
@@ -31,6 +33,7 @@ data class Rates(
     val dKK: Double,
     @SerializedName("EUR")
     @Expose
+    @PrimaryKey
     val eUR: Double,
     @SerializedName("GBP")
     @Expose

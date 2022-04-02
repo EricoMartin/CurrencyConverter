@@ -5,7 +5,9 @@ import com.basebox.ratexchange.util.Resource
 
 interface MainRepository {
     suspend fun getRate(baseCurrency: String): Resource<RateResponse>
-
     suspend fun getTimelyRates(): Resource<RateResponse>
+    suspend fun getDBRates(baseCurrency: String): RateResponse
+    suspend fun insertRatesInDB(rateResponse: RateResponse)
+    suspend fun refreshDB()
 }
 

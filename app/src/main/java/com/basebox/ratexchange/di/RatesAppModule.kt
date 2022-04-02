@@ -1,6 +1,9 @@
 package com.basebox.ratexchange.di
 
+import android.content.Context
 import com.basebox.ratexchange.data.constants.URLConstants
+import com.basebox.ratexchange.data.local.dao.RatesDao
+import com.basebox.ratexchange.data.local.database.RatesDB
 import com.basebox.ratexchange.data.remote.ApiCall.RemoteAPICall
 import com.basebox.ratexchange.data.remote.service.RatesAPI
 import com.basebox.ratexchange.repos.DefaultRepository
@@ -9,6 +12,7 @@ import com.basebox.ratexchange.util.DispatcherProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -54,7 +58,8 @@ object RatesAppModule {
 
     @Singleton
     @Provides
-    fun provideMainRepository(api: RemoteAPICall): MainRepository = DefaultRepository(api)
+    fun provideMainRepository(api: RemoteAPICall, ratesDao: RatesDao):
+            MainRepository = DefaultRepository(api, ratesDao)
 
     @Singleton
     @Provides
@@ -69,4 +74,18 @@ object RatesAppModule {
             get() = Dispatchers.Unconfined
 
     }
+
+    @Singleton
+    @Provides
+    fun provideDB(@ApplicationContext context: Context): RatesDB {
+        return RatesDB.getInstance(context)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDao(ratesDB: RatesDB): RatesDao {
+        return ratesDB.ratesDao
+    }
+
+
 }

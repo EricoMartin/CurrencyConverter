@@ -12,4 +12,7 @@ interface RatesAPI {
 
     @GET(URLConstants.TIME_URL)
     suspend fun getTimeRates(): Response<RateResponse>
+
+    @GET(URLConstants.USD_URL)
+    suspend fun getRatesForDBAsync(@Query("base") currency: String): Response<RateResponse>
 }

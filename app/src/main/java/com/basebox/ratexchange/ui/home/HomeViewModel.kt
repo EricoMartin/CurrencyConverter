@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.basebox.ratexchange.data.remote.Rates
+import com.basebox.ratexchange.data.local.entity.RatesModel
 import com.basebox.ratexchange.repos.MainRepository
 import com.basebox.ratexchange.util.DispatcherProvider
 import com.basebox.ratexchange.util.Resource
@@ -22,6 +22,12 @@ class HomeViewModel @Inject constructor(
     private val repository: MainRepository,
     private val dispatcher: DispatcherProvider
 ) : ViewModel() {
+
+    init {
+        viewModelScope.launch {
+            repository.refreshDB()
+        }
+    }
 
     sealed class RateEvent {
         class Success(val result: String) : RateEvent()
@@ -52,28 +58,27 @@ class HomeViewModel @Inject constructor(
 
         viewModelScope.launch(dispatcher.io) {
             _conversion.value = RateEvent.Loading
-            when (val ratesResponse = repository.getRate(baseCurrency.lowercase())) {
-                is Resource.Error -> {
+            val remoteRate = repository.getRate(baseCurrency.lowercase())
+            if (remoteRate is Resource.Success) {
+                repository.insertRatesInDB(remoteRate.data!!)
+                val rates = repository.getDBRates(baseCurrency.lowercase())
+                val rate = getCurrencyRate(toCurrency, rates.rates)
+                Log.d("ViewModelResponse", "Rate = $rate")
+                if (rate == 0.0) {
+                    _conversion.value = RateEvent.Failure("Error")
+                } else {
+                    val convertedRate = round(from * rate * 100) / 100
+                    Log.d(
+                        "HomeViewModel Response",
+                        "Result = ${convertedRate.toDouble()} $toCurrency"
+                    )
                     _conversion.value =
-                        RateEvent.Failure(ratesResponse.message!!)
-                    Log.d("ViewModelErrResponse", "Rate = ${ratesResponse.message}")
+                        RateEvent.Success("$convertedRate $toCurrency")
                 }
-                is Resource.Success -> {
-                    val rates = ratesResponse.data!!.rates
-                    val rate = getCurrencyRate(toCurrency, rates)
-                    Log.d("ViewModelResponse", "Rate = $rate")
-                    if (rate == 0.0) {
-                        _conversion.value = RateEvent.Failure("Error")
-                    } else {
-                        val convertedRate = round(from * rate * 100) / 100
-                        Log.d(
-                            "HomeViewModel Response",
-                            "Result = ${convertedRate.toDouble()} $toCurrency"
-                        )
-                        _conversion.value =
-                            RateEvent.Success("$convertedRate $toCurrency")
-                    }
-                }
+            } else if (remoteRate is Resource.Error) {
+                _conversion.value =
+                    RateEvent.Failure(remoteRate.message!!)
+                Log.d("ViewModelErrResponse", "Rate = ${remoteRate.message}")
             }
         }
     }
@@ -99,7 +104,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun getCurrencyRate(currency: String, rates: Rates): Double =
+    private fun getCurrencyRate(currency: String, rates: RatesModel): Double =
         when (currency) {
             "USD" -> rates.uSD
             "JPY" -> rates.jPY

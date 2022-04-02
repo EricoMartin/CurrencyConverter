@@ -19,9 +19,10 @@ import com.google.android.material.imageview.ShapeableImageView
 import java.util.*
 
 
-internal class SpinnerAdapter(context: Context, states: Array<String>) :
-    ArrayAdapter<String?>(context, R.layout.drop_down_item, states) {
-    var statesList: Array<String> = states
+internal class SpinnerAdapter(context: Context, countries: Array<String>) :
+    ArrayAdapter<String?>(context, R.layout.drop_down_item, countries) {
+    var countriesList: Array<String> = countries
+
     var thisContext = context
 
     // Override these methods and instead return our custom view (with image and text)
@@ -43,7 +44,7 @@ internal class SpinnerAdapter(context: Context, states: Array<String>) :
     @RequiresApi(Build.VERSION_CODES.M)
     fun getCustomView(position: Int, convertView: View?, parent: ViewGroup?): View {
 
-        var binding: DropDownItemBinding
+        val binding: DropDownItemBinding
         var row = convertView
         if (row == null) {
             val inflater =
@@ -56,26 +57,31 @@ internal class SpinnerAdapter(context: Context, states: Array<String>) :
         }
 
         // Image and TextViews
-        val state: TextView = row.findViewById(binding.textView2.id)
+        val country: TextView = row.findViewById(binding.textView2.id)
         val flag: ShapeableImageView = row.findViewById(binding.img.id)
 
         // Get flag image from drawables folder
         val res: Resources = thisContext.resources
-        val drawableName = statesList[position].lowercase(Locale.getDefault())
-        val resId = res.getIdentifier(drawableName, "drawable", thisContext.packageName)
+        val drawableName = countriesList[position].lowercase(Locale.getDefault())
+        var resId = 0
+        if (drawableName == "try")
+            resId = res.getIdentifier("tr", "drawable", thisContext.packageName)
+        else
+            resId = res.getIdentifier(drawableName, "drawable", thisContext.packageName)
+
         Log.d("SpinnerAdapterTag", "Message = $resId")
         val drawable: Drawable? =
             ResourcesCompat.getDrawable(res, resId, this.dropDownViewTheme)
 
-        //Set state abbreviation and state flag
-        state.text = statesList[position]
+        //Set state abbreviation and country flag
+        country.text = countriesList[position]
         flag.setImageDrawable(drawable)
         return row
     }
 
-    // Constructor accepts Context (from MainActivity) and a list of state abbreviations
+    // Constructor accepts Context (from MainActivity) and a list of country abbreviations
     init {
         thisContext = context
-        statesList = states
+        countriesList = countries
     }
 }
