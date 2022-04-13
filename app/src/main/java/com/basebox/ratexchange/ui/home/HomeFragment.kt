@@ -54,7 +54,7 @@ class HomeFragment : Fragment() {
             resources.getStringArray(R.array.currencies)
         )
 
-        homeViewModel.getHistoricalRates()
+//        homeViewModel.getHistoricalRates()
         spinnerAdapter.setDropDownViewResource(R.layout.drop_down_item)
 
         binding.spinner.adapter = spinnerAdapter

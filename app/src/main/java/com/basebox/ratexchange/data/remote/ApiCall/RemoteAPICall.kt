@@ -10,4 +10,7 @@ class RemoteAPICall @Inject constructor(private val apiService: RatesAPI) {
     suspend fun getTimelyRates() = apiService.getTimeRates()
 
     suspend fun getRatesForDB(base: String) = apiService.getRatesForDBAsync(base)
+
+
 }
+
